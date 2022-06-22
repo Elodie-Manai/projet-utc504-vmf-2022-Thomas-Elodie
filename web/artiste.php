@@ -4,7 +4,7 @@
 <?php
 // Définition des variables globales
 $GLOBALS["title-page"] = "Programmation par jour";
-$GLOBALS["id-page"] = "nav-prog-par-jour";
+
 $GLOBALS["bdd-lecture-PDO"] = null;
 
 // Inclusion du script permettant de se connecter à la BDD
@@ -26,46 +26,39 @@ require("inclusions/head.php");
 	<?php
 	// Inclusion de l'en-tête de la page (<header>)
 	require("inclusions/header.php");
-	$aArtistes = executeRequeteQuiRetourneDesEnregistrements(
+	$artiste = executeRequeteQuiRetourneDesEnregistrements(
 		$GLOBALS["bdd-lecture-PDO"],
-		"SELECT *, artiste.nom as nom_artiste, scene.nom as nom_scene FROM concert, artiste, scene WHERE artiste.id_artiste = concert.id_artiste AND concert.id_scene = scene.id_scene  ORDER BY concert.date_concert, concert.heure_concert;" 
-	);
-	$aDates = executeRequeteQuiRetourneDesEnregistrements(
+		"SELECT * FROM artiste, video WHERE artiste.id_artiste = " . $_GET['id'] . ";" 
+	)[0];
+	$aVideos = executeRequeteQuiRetourneDesEnregistrements(
 		$GLOBALS["bdd-lecture-PDO"],
-		"SELECT date_concert FROM concert GROUP BY date_concert;" 
+		"SELECT * FROM  video WHERE video.id_artiste = " . $_GET['id'] . ";" 
 	);
 	?>
 
 	<!-- Contenu principal de la page -->
 	<main class="container px-5">
-		<h1>Programmation par jour</h1>
-
-		<p class="lead">Cette page affiche la liste des concert par jour du festival 2022 (ordre chronologique).</p>
-
-		<div class="row my-5">
-			<?php foreach($aDates as $date) { ?>
-			<h2 class="donnee-bdd gras" style="font-size: 2em" ><?= $date['date_concert'] ?></h2>
-				<?php foreach($aArtistes as $artiste) { ?>
-					<?php if($artiste['date_concert'] == $date['date_concert']) { ?>
-						<div class="col-lg-3 col-md-4 col-sm-6 my-2">
-							<a style="text-decoration: none; color: black" href="<?= $artiste['lien_site'] ?>">
-								<div class="card">
-									<img src="<?= $artiste['lien_photo']; ?>" class="card-img-top" alt="Illustration artiste">
-									<div class="card-body">
-										<h5 class="card-title"><span class="donnee-bdd gras"><?= $artiste['nom_artiste']; ?></span></h5>
-										<p class="card-text">
-											Heure de début : <span class="donnee-bdd"><?= $artiste['heure_concert']; ?></span><br>
-											Scène : <span class="donnee-bdd"><?= $artiste['nom_scene'] ?></span>
-										</p>
-									</div>
-								</div>
-							</a>
-						</div>
-					<?php } ?>
-				<?php } ?>
-			<?php } ?>
+		<div style="text-align: center">
+			<img src="<?= $artiste['lien_photo'] ?>" alt="artiste photo" class="img-fluid" style="width: 250px; height: 250px; border-radius: 100%;">
+			<h1><?=$artiste['nom'] ?></h1>
+			<a href="<?= $artiste['lien_site'] ?>" class="btn btn-outline-primary btn-lg">visitez moi</a>
 		</div>
-
+		<div class="row my-5">
+			<h2>Mes créations</h2>
+			<?php foreach($aVideos as $video) { ?>
+				<?php 
+				$url = $video['lien_video'];
+				preg_match_all("#(?<=v=|v\/|vi=|vi\/|youtu.be\/)[a-zA-Z0-9_-]{11}#", $url, $match);		 
+				?>
+				<div class="col-lg-6 col-md-6 col-sm-6">
+					<div class="card">
+						<div class="card-body">
+							<iframe width="560" height="315" src="https://www.youtube.com/embed/<?= $match[0][0] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						</div>
+					</div>
+				</div>
+			<?php } ?>      
+		</div>
 	</main>
 
 	<!-- Inclusion du JS de Bootstrap -->

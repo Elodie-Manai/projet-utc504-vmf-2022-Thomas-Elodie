@@ -44,7 +44,7 @@ require("inclusions/head.php");
 			<?php foreach($aArtistes as $artiste) { ?> 
 
 				<div class="col-lg-3 col-md-4 col-sm-6 my-2">
-					<a style="text-decoration: none; color: black" href="<?= $artiste['lien_site'] ?>">
+					<a style="text-decoration: none; color: black" href="artiste.php?id=<?= $artiste['id_artiste'] ?>">
 						<div class="card">
 							<img src="<?= $artiste['lien_photo'] ?>" class="card-img-top" alt="Illustration artiste">
 							<div class="card-body">
