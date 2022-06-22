@@ -1,0 +1,37 @@
+CREATE TABLE scene(
+   id_scene INT AUTO_INCREMENT,
+   nom VARCHAR(50) ,
+   adresse VARCHAR(255) ,
+   code_postal INT,
+   ville VARCHAR(255) ,
+   PRIMARY KEY(id_scene)
+);
+
+CREATE TABLE artiste(
+   id_artiste INT AUTO_INCREMENT,
+   nom VARCHAR(255) ,
+   lien_photo VARCHAR(255) ,
+   lien_site VARCHAR(255) ,
+   PRIMARY KEY(id_artiste)
+);
+
+CREATE TABLE video(
+   id_video INT AUTO_INCREMENT,
+   nom_video VARCHAR(255) ,
+   lien_video VARCHAR(255) ,
+   id_artiste INT NOT NULL,
+   PRIMARY KEY(id_video),
+   FOREIGN KEY(id_artiste) REFERENCES artiste(id_artiste)
+);
+
+CREATE TABLE concert(
+   id_scene INT,
+   id_artiste INT,
+   date_concert VARCHAR(255) ,
+   heure_concert VARCHAR(255) ,
+   
+   entree_libre BOOLEAN,
+   PRIMARY KEY(id_scene, id_artiste),
+   FOREIGN KEY(id_scene) REFERENCES scene(id_scene),
+   FOREIGN KEY(id_artiste) REFERENCES artiste(id_artiste)
+);

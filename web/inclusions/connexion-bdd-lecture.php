@@ -1,9 +1,9 @@
 <?php
 // Informations de connexion à la BDD
-$url_hote_mysql = "...";
-$nom_base = "...";
-$nom_utilisateur_base = "";
-$mdp_utilisateur_base = "";
+$url_hote_mysql = "mysql-colin-manai.alwaysdata.net";
+$nom_base = "colin-manai_vmf2022";
+$nom_utilisateur_base = "273544_lecteur";
+$mdp_utilisateur_base = "vx3wcejfb";
 // TODO Compléter avec les informations de connexion de votre propre BDD
 
 // Vérification des informations de connexion

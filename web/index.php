@@ -38,36 +38,32 @@ require("inclusions/head.php");
 
 		<div class="row my-2">
 
+		<?php $aConcerts = executeRequeteQuiRetourneDesEnregistrements(
+								$GLOBALS["bdd-lecture-PDO"],
+								"SELECT count(*) as count, date_concert as date, MIN(heure_concert) as heure FROM `concert` GROUP BY date_concert;"
+							);
+			
+		?>
 			<!-- 1ère Card -->
 			<div class="col-lg-6 col-sm-12 my-2">
 				<div class="card">
 					<h5 class="card-header">3 jours de concerts</h5>
 					<div class="card-body">
-
 						<ul>
-							<!-- Concerts du 01/07/2022 -->
-							<li>Vendredi 1er juillet 2022 :
-								<?php
-								$nb = "...";
-								echo " <span class='donnee-test gras'>" . $nb . "</span> concerts ";
-								?>
-								<?php
-								$heure_deb = "...";
-								echo " à partir de <span class='donnee-test gras'>" . $heure_deb . "</span>";
-								?>
-							</li>
-
-							<!-- Concerts du 02/07/2022 -->
-							<li>Samedi 2 juillet 2022 :
-								<span class='donnee-test gras'>...</span>
-							</li>
-
-							<!-- Concerts du 03/07/2022 -->
-							<li>Dimanche 3 juillet 2022 :
-								<span class='donnee-test gras'>...</span>
-							</li>
+							<?php foreach ($aConcerts as $concert) { ?>
+								<!-- Concerts du 01/07/2022 -->
+								<li><span class='donnee-bdd gras'><?= $concert['date'] ?> </span> :
+									<?php
+									$nb = $concert['count'];
+									echo " <span class='donnee-bdd gras'>" . $nb . "</span> concerts ";
+									?>
+									<?php
+									$heure_deb = $concert['heure'];
+									echo " à partir de <span class='donnee-bdd gras'>" . $heure_deb . "</span>";
+									?>
+								</li>
+							<?php } ?>
 						</ul>
-						<p>coucou</p>
 
 					</div>
 				</div>
@@ -87,16 +83,13 @@ require("inclusions/head.php");
 							// TOFIX Exécution d'une requête de test (pour voir comment cela fonctionne)
 							$tabScenes = executeRequeteQuiRetourneDesEnregistrements(
 								$GLOBALS["bdd-lecture-PDO"],
-								"SELECT * FROM Scene" /* TODO Adapter la requête SQL */
+								"SELECT * FROM scene" /* TODO Adapter la requête SQL */
 							);
-
-							// TODELETE Données de test
-							$tabScenes = ["Scène 1", "Scène 2", "Scène 3"];
 
 							if (!empty($tabScenes)) {
 								// Si scènes trouvées => Parcours et affichage des scènes
 								foreach ($tabScenes as $scene) {
-									echo "<li><span class='donnee-test gras'>" . $scene . "</li>";
+									echo "<li><span class='donnee-bdd gras'>" . $scene['nom'] . " (" . $scene['code_postal'] . " " . $scene['ville'] . ")</li>";
 								}
 							} else {
 								// Si aucune scène trouvée => Affichage d'un message
